@@ -5,10 +5,109 @@
 {% endblock %}
 
 {% block body %}
+
     <form id="search-form">
         {% csrf_token %}
-        <input class="search" id="q" type="text" name="q" placeholder="Search Movies">
-        <input type="submit" class="btn btn-primary" value="search">
+        <div class="container">
+        <input style="width: 83%" class="search" id="q" type="text" name="q" placeholder="Search Movies">
+        <input type="submit" class="btn btn-primary" value="Search OMDB Movies">
+    	</div>
     </form>
+
+
+    <div id="comments-section" class="container">
+
+    	{% if wild == "following" %}
+    	<H3> Comments from users you follow </H3>
+    	{% endif %}
+
+	    {% if wild == "profile" %}
+	    <h3>{{user.username}}</h3>        
+	    <div><label>Followers: {{ user.followers.count }} </label></div>
+	    <div><label>Following: {{ user.following.count }}   </label></div> 
+	    {% if request.user != user and request.user.is_authenticated  %}
+		    <form action="{% url 'follow' username=user.username %}" method="post">
+	            {% csrf_token %}
+	            <input type="submit"
+	            {% if request.user not in user.followers.all %}  
+	            	class="btn btn-small btn-primary"  value="Follow" name="follow" 
+	            {% else %} 
+	             	class="btn btn-small btn-secondary"  value="Unfollow" 
+	            {% endif %}
+	            />
+			 </form>
+
+	    {% endif %}
+	    {% endif %}
+
+	    {% if comments %}
+	    	{% for comment in comments %}
+	    	<div class="container border">
+		    <a href="{% url 'profile' comment.user.username %}" style="font-weight:lighter">{{comment.user}}</a>
+		    
+		    {% if request.user == comment.user %}
+		    <form id="edit-form" action="{% url 'edit' comment.id %}" method="post">
+		    	{% csrf_token %}
+		    	<textarea name="content" style="width: 100%">{{comment.content | safe }}</textarea>
+		    	<input name="edit" type="submit" class="btn btn-secondary" value="edit">
+		    	<input id="delete" type="submit" class="btn btn-danger" value="delete">
+		    </form>
+		    {% else %}
+		    <h3>{{comment.content}}</h3>
+		    {% if request.user.is_authenticated %}
+		    	<input type="submit" id='like-button'
+	            {% if request.user not in comment.likes.all %}  
+	            	class="btn btn-outline-danger" value="Like" 
+	            	data-like="0"
+	            {% else %} 
+	             	class="btn btn-small btn-danger liked"  value="Liked" 
+	             	data-like="1"
+	            {% endif %}
+	            data-comment="{{ comment.id }}"
+	            />
+	            <span class="like-count" data-comment="{{ comment.id }}">{{ comment.likes.count }}</span>
+		    {% endif %}
+		    {% endif %}
+		    </div>
+		    {% endfor %}
+	    {% endif %}
+
+	</div>
+   
+
     <div id='results'></div>
+    <div id='results-byId'>
+    	{% csrf_token %}
+ 
+    	<div id='movie-content'></div>
+
+	    <form id="comment-form" action="{% url 'new_comment' %}" method="post">
+	        {% csrf_token %}
+	        {% if request.user.is_authenticated %}
+	        <div class="container border">
+	        <h3>Comment</h3>
+			<textarea class="form-control" name="comment-text" placeholder="What's on your mind?..."></textarea>
+			<input type="hidden" name="id" id="movieId">
+			<div style="text-align: right">
+	        <input type="submit" class="btn btn-primary" value="post">
+	    	</div>
+	        </div>
+	        {% endif %}
+	    </form>
+	    </div>
+
+	<hr>
+    <ul class="pagination pagination-sm">
+        {% if page.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page={{ page.previous_page_number }}">Previous</a></li>
+        {% endif %}
+        {% if page.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ page.next_page_number }}">Next</a></li>
+        {% endif %}
+    </ul>
+
+
+
+
+    
 {% endblock %}
