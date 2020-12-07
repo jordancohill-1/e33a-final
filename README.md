@@ -14,7 +14,15 @@ Entering a movie in the search bar, at the top of the page, calls a javascript f
 getMovie()--`http://www.omdbapi.com/?i=`+movieId+`&apikey=7527df32`
 Clicking a result calls another fetch to get the data of the selected movie. This function loads the route "moviedata" which populates a list of comments from the server.
 
+This functionality is again utilized from the "See More!" link on the "All Comments" page or the default page.
+
 After register/login, a user can comment on any movie, like/unlike comments, follow/unfollow other users. View comments from users that are followed.
+
+
+
+
+
+
 
 ToDo
 Allow users to rate a movie
