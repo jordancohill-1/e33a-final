@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>{% block title %}Social movie{% endblock %}</title>
+        <title>{% block title %}Movie Bash{% endblock %}</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <link href="{% static 'movie/styles.css' %}" rel="stylesheet">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
@@ -13,7 +13,7 @@
     <body>
 
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="{% url 'index' %}">movie</a>
+            <a class="navbar-brand" href="{% url 'index' %}">Movie Bash</a>
           
             <div>
               <ul class="navbar-nav mr-auto">
@@ -21,6 +21,11 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#"><strong>{{ request.user.username }}</strong></a>
                     </li>
+                {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'index' %}"><strong>All Comments</strong></a>
+                    </li>
+               {% if request.user.is_authenticated %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'following' %}">Following</a>
                     </li>
