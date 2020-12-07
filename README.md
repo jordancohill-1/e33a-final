@@ -1,6 +1,6 @@
 Movie Bash
 
-This final project is an extension of Project 4.
+This final project is an extension of Project 4. It is a single page app with all routes returning to index.html.
 
 It utilizes the omdb api to fetch movie data.
 
